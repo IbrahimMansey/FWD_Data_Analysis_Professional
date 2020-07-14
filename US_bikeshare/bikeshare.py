@@ -217,6 +217,37 @@ def user_stats(df, city):
     print('-'*40)
 
 
+def display_data(df):
+    """
+    Raw data is displayed upon request by the user in this manner:
+
+    function prompt the user if they want to see 5 lines of raw data.
+    display that data if the answer is 'yes', and continue these prompts and displays
+    until the user says 'no'.
+    """
+    while True:
+        # prompt user whether to view row data.
+        display = input('want to see 5 lines preview of the data ?\
+                        Enter yes or no.\n ')
+        if display.lower() not in ['yes', 'y']:
+            break
+        else: 
+            while True:
+                #print first 5 rows
+                print(df.head())
+                try:
+                    # delete first 5 rows to preview next data
+                    df = df.iloc[5:]
+                    #exception if the data finished and iloc out of range
+                except KeyError, IndexError:
+                    print('\nthat\'s all of the data filterd')
+                    break
+                # prompt user to preview more data
+                display = input('want to see more of the data ? Enter yes or no.\n ')
+                if display.lower() not in ['yes', 'y']:
+                    break
+            break
+
 def main():
     while True:
         city, month, day = get_filters()
@@ -229,7 +260,8 @@ def main():
         station_stats(df)
         trip_duration_stats(df)
         user_stats(df, city)
-
+        display_data(df)
+        
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() not in ['yes', 'y']:
             break
